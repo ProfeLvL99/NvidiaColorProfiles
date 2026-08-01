@@ -176,6 +176,20 @@ public partial class MainWindow : Window
         catch { }
     }
 
+    private void AuthorLink_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://github.com/ProfeLvL99",
+                UseShellExecute = true
+            };
+            System.Diagnostics.Process.Start(psi);
+        }
+        catch { }
+    }
+
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         if (msg == HotkeyService.WM_HOTKEY) { _hotkeyService.ProcessHotkeyMessage(wParam); handled = true; }
