@@ -4,6 +4,10 @@ A WPF desktop app to manage color profiles for NVIDIA GPUs. Create, save, and sw
 
 ![Screenshot](NvidiaColorProfileManager/screenshots/NVIDIAColorProfiles_01.png)
 
+## Why?
+
+Ideal when NVIDIA Freestyle filters aren't available (unsupported games, driver issues) or when you want per-game color adjustments without installing ReShade. Since it talks directly to the GPU driver via NVAPI, changes apply globally and work in any application.
+
 ## Features
 
 - Create and manage multiple color profiles
