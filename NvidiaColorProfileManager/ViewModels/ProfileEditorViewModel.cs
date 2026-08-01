@@ -19,7 +19,7 @@ public partial class ProfileEditorViewModel : ObservableObject
     private ColorSettings? _originalSettings;
     private bool _suppressPreview;
 
-    [ObservableProperty] private string _dialogTitle = "Nuevo Perfil";
+    [ObservableProperty] private string _dialogTitle = "New Profile";
     [ObservableProperty] private string _profileName = string.Empty;
     [ObservableProperty] private ObservableCollection<DisplayInfo> _availableDisplays = new();
     [ObservableProperty] private DisplayInfo? _selectedTargetDisplay;
@@ -30,7 +30,7 @@ public partial class ProfileEditorViewModel : ObservableObject
     [ObservableProperty] private int _colorTemperature = 0;
     [ObservableProperty] private bool _isOpen;
     [ObservableProperty] private string? _hotkey;
-    [ObservableProperty] private string _hotkeyDisplay = "Click para asignar atajo...";
+    [ObservableProperty] private string _hotkeyDisplay = "Click to assign shortcut...";
 
     public event Action<ColorProfile>? ProfileSaved;
     public event Action? RequestClose;
@@ -92,12 +92,12 @@ public partial class ProfileEditorViewModel : ObservableObject
 
         _isEditing = false;
         _editingProfileId = 0;
-        DialogTitle = "Nuevo Perfil";
+        DialogTitle = "New Profile";
         _suppressPreview = true;
         ResetToDefaults();
         _suppressPreview = false;
         Hotkey = null;
-        HotkeyDisplay = "Click para asignar atajo...";
+        HotkeyDisplay = "Click to assign shortcut...";
         LoadDisplays();
         IsOpen = true;
     }
@@ -110,7 +110,7 @@ public partial class ProfileEditorViewModel : ObservableObject
 
         _isEditing = true;
         _editingProfileId = profile.Id;
-        DialogTitle = $"Editar: {profile.Name}";
+        DialogTitle = $"Edit: {profile.Name}";
 
         _suppressPreview = true;
         ProfileName = profile.Name;
@@ -122,7 +122,7 @@ public partial class ProfileEditorViewModel : ObservableObject
         _suppressPreview = false;
 
         Hotkey = profile.Hotkey;
-        HotkeyDisplay = profile.Hotkey ?? "Click para asignar atajo...";
+        HotkeyDisplay = profile.Hotkey ?? "Click to assign shortcut...";
 
         LoadDisplays();
 
@@ -164,7 +164,7 @@ public partial class ProfileEditorViewModel : ObservableObject
             Id = _editingProfileId,
             Name = ProfileName.Trim(),
             DisplayId = SelectedTargetDisplay?.Id ?? -1,
-            DisplayName = SelectedTargetDisplay?.Name ?? "Todos los monitores",
+            DisplayName = SelectedTargetDisplay?.Name ?? "All monitors",
             Hotkey = string.IsNullOrWhiteSpace(Hotkey) ? null : Hotkey.Trim(),
             Settings = new ColorSettings
             {
@@ -225,7 +225,7 @@ public partial class ProfileEditorViewModel : ObservableObject
     {
         var displays = _monitorService.DetectDisplays();
         AvailableDisplays = new ObservableCollection<DisplayInfo>(displays);
-        AvailableDisplays.Insert(0, new DisplayInfo { Id = -1, Name = "Todos los monitores", IsConnected = true });
+        AvailableDisplays.Insert(0, new DisplayInfo { Id = -1, Name = "All monitors", IsConnected = true });
     }
 
     private void ResetToDefaults()

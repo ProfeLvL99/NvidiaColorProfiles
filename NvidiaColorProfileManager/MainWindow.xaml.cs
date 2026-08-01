@@ -105,7 +105,7 @@ public partial class MainWindow : Window
         var activeProfile = _viewModel.SelectedProfile;
         if (activeProfile != null)
         {
-            var header = new Forms.ToolStripMenuItem($"Perfil activo: {activeProfile.Name}")
+            var header = new Forms.ToolStripMenuItem($"Active profile: {activeProfile.Name}")
             {
                 Enabled = false,
                 Font = new System.Drawing.Font(menu.Font, System.Drawing.FontStyle.Bold)
@@ -138,8 +138,8 @@ public partial class MainWindow : Window
             hasItems = true;
         }
         if (hasItems) menu.Items.Add(new Forms.ToolStripSeparator());
-        menu.Items.Add("Restaurar", null, (s, e) => ShowFromTray());
-        menu.Items.Add("Salir", null, (s, e) => { _isReallyClosing = true; _hotkeyService.Dispose(); _trayIcon?.Dispose(); Application.Current.Shutdown(); });
+        menu.Items.Add("Restore", null, (s, e) => ShowFromTray());
+        menu.Items.Add("Exit", null, (s, e) => { _isReallyClosing = true; _hotkeyService.Dispose(); _trayIcon?.Dispose(); Application.Current.Shutdown(); });
         return menu;
     }
 
@@ -186,6 +186,6 @@ public partial class MainWindow : Window
     private void OnHotkeyPressed(int id)
     {
         var p = _profileRepository.GetById(id);
-        if (p != null) { _profileApplier.ApplyProfile(p); _viewModel.StatusMessage = $"Hotkey: perfil '{p.Name}' aplicado."; }
+        if (p != null) { _profileApplier.ApplyProfile(p); _viewModel.StatusMessage = $"Hotkey: profile '{p.Name}' applied."; }
     }
 }

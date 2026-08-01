@@ -25,10 +25,10 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<DisplayInfo> _displays = new();
     [ObservableProperty] private ColorProfile? _selectedProfile;
     [ObservableProperty] private bool _isNvapiAvailable;
-    [ObservableProperty] private string _statusMessage = "Listo.";
-    [ObservableProperty] private string _nvapiStatusText = "Verificando NVAPI...";
+    [ObservableProperty] private string _statusMessage = "Ready.";
+    [ObservableProperty] private string _nvapiStatusText = "Checking NVAPI...";
     [ObservableProperty] private bool _startWithWindows;
-    [ObservableProperty] private string _editorTitle = "Selecciona o crea un perfil";
+    [ObservableProperty] private string _editorTitle = "Select or create a profile";
 
     // ── Editor Fields ──
     [ObservableProperty] private string _profileName = string.Empty;
@@ -40,7 +40,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private int _digitalVibrance = 50;
     [ObservableProperty] private int _colorTemperature = 0;
     [ObservableProperty] private string? _hotkey;
-    [ObservableProperty] private string _hotkeyDisplay = "Click para asignar atajo...";
+    [ObservableProperty] private string _hotkeyDisplay = "Click to assign shortcut...";
     [ObservableProperty] private bool _hasChanges;
 
     public event Action? ProfilesChanged;
@@ -76,7 +76,7 @@ public partial class MainViewModel : ObservableObject
     partial void OnStartWithWindowsChanged(bool value)
     {
         _startupService.SetStartup(value);
-        StatusMessage = value ? "Inicio con Windows activado." : "Inicio con Windows desactivado.";
+        StatusMessage = value ? "Start with Windows enabled." : "Start with Windows disabled.";
     }
 
     private void ApplyLivePreview()
@@ -102,7 +102,7 @@ public partial class MainViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error en preview: {ex.Message}";
+            StatusMessage = $"Preview error: {ex.Message}";
         }
     }
 
@@ -111,12 +111,12 @@ public partial class MainViewModel : ObservableObject
     {
         StartWithWindows = _startupService.IsStartupEnabled();
         IsNvapiAvailable = _nvapiService.Initialize();
-        NvapiStatusText = IsNvapiAvailable ? "NVAPI: Conectada" : "NVAPI: No disponible";
+        NvapiStatusText = IsNvapiAvailable ? "NVAPI: Connected" : "NVAPI: Not available";
 
         if (IsNvapiAvailable)
         {
             Displays = new ObservableCollection<DisplayInfo>(_monitorService.DetectDisplays());
-            StatusMessage = $"{Displays.Count} monitor(es) NVIDIA detectado(s).";
+            StatusMessage = $"{Displays.Count} NVIDIA monitor(s) detected.";
         }
 
         LoadProfiles();
@@ -132,7 +132,7 @@ public partial class MainViewModel : ObservableObject
     {
         var list = _monitorService.DetectDisplays();
         AvailableDisplays = new ObservableCollection<DisplayInfo>(list);
-        AvailableDisplays.Insert(0, new DisplayInfo { Id = -1, Name = "Todos los monitores" });
+        AvailableDisplays.Insert(0, new DisplayInfo { Id = -1, Name = "All monitors" });
     }
 
     // ── Editor ──
@@ -142,13 +142,13 @@ public partial class MainViewModel : ObservableObject
         SaveOriginalState();
         _isEditing = false;
         _editingProfileId = 0;
-        EditorTitle = "Nuevo Perfil";
+        EditorTitle = "New Profile";
         _suppressPreview = true;
         ProfileName = string.Empty;
         Brightness = 50; Contrast = 50; Gamma = 1.0; DigitalVibrance = 50; ColorTemperature = 0;
         SelectedTargetDisplay = null;
         Hotkey = null;
-        HotkeyDisplay = "Click para asignar atajo...";
+        HotkeyDisplay = "Click to assign shortcut...";
         _suppressPreview = false;
         HasChanges = false;
         SelectedProfile = null;
@@ -159,7 +159,7 @@ public partial class MainViewModel : ObservableObject
         SaveOriginalState();
         _isEditing = true;
         _editingProfileId = profile.Id;
-        EditorTitle = $"Editando: {profile.Name}";
+        EditorTitle = $"Editing: {profile.Name}";
 
         _suppressPreview = true;
         ProfileName = profile.Name;
@@ -169,7 +169,7 @@ public partial class MainViewModel : ObservableObject
         DigitalVibrance = profile.Settings.DigitalVibrance;
         ColorTemperature = profile.Settings.ColorTemperature;
         Hotkey = profile.Hotkey;
-        HotkeyDisplay = profile.Hotkey ?? "Click para asignar atajo...";
+        HotkeyDisplay = profile.Hotkey ?? "Click to assign shortcut...";
         _suppressPreview = false;
 
         var target = AvailableDisplays.FirstOrDefault(d => d.Id == profile.DisplayId);
@@ -215,7 +215,7 @@ public partial class MainViewModel : ObservableObject
                 Id = _editingProfileId,
                 Name = ProfileName.Trim(),
                 DisplayId = SelectedTargetDisplay?.Id ?? -1,
-                DisplayName = SelectedTargetDisplay?.Name ?? "Todos los monitores",
+                DisplayName = SelectedTargetDisplay?.Name ?? "All monitors",
                 Hotkey = string.IsNullOrWhiteSpace(Hotkey) ? null : Hotkey.Trim(),
                 Settings = new ColorSettings
                 {
@@ -230,15 +230,15 @@ public partial class MainViewModel : ObservableObject
             _isEditing = true;
             _editingProfileId = profile.Id;
             HasChanges = false;
-            EditorTitle = $"Editando: {profile.Name}";
-            StatusMessage = "Perfil guardado correctamente.";
+            EditorTitle = $"Editing: {profile.Name}";
+            StatusMessage = "Profile saved successfully.";
 
             LoadProfiles();
             ProfilesChanged?.Invoke();
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error al guardar: {ex.Message}";
+            StatusMessage = $"Error saving: {ex.Message}";
         }
     }
 
@@ -269,7 +269,7 @@ public partial class MainViewModel : ObservableObject
         _profileApplier.ApplyProfile(profile);
         SelectedProfile = profile;
         LoadProfileIntoEditor(profile);
-        StatusMessage = $"Perfil '{profile.Name}' aplicado.";
+        StatusMessage = $"Profile '{profile.Name}' applied.";
     }
 
     [RelayCommand]
@@ -280,7 +280,7 @@ public partial class MainViewModel : ObservableObject
         _profileRepository.Delete(profile.Id);
         Profiles.Remove(profile);
         if (SelectedProfile?.Id == profile.Id) NewProfileCommand.Execute(null);
-        StatusMessage = $"Perfil '{name}' eliminado.";
+        StatusMessage = $"Profile '{name}' deleted.";
         ProfilesChanged?.Invoke();
     }
 
@@ -289,7 +289,7 @@ public partial class MainViewModel : ObservableObject
     {
         _profileApplier.RestoreDefaults();
         NewProfileCommand.Execute(null);
-        StatusMessage = "Valores por defecto restaurados.";
+        StatusMessage = "Default values restored.";
     }
 
     [RelayCommand]
@@ -298,7 +298,7 @@ public partial class MainViewModel : ObservableObject
         if (!IsNvapiAvailable) return;
         Displays = new ObservableCollection<DisplayInfo>(_monitorService.DetectDisplays());
         LoadDisplaysForEditor();
-        StatusMessage = $"{Displays.Count} monitor(es) NVIDIA detectado(s).";
+        StatusMessage = $"{Displays.Count} NVIDIA monitor(s) detected.";
     }
 
     public void SetHotkey(string formatted)
@@ -310,6 +310,6 @@ public partial class MainViewModel : ObservableObject
     public void ClearHotkey()
     {
         Hotkey = null;
-        HotkeyDisplay = "Click para asignar atajo...";
+        HotkeyDisplay = "Click to assign shortcut...";
     }
 }

@@ -41,11 +41,11 @@
                     </Grid.RowDefinitions>
 
                     <!-- Title -->
-                    <TextBlock Grid.Row="0" Text="Perfiles" FontSize="15" FontWeight="SemiBold"
+                    <TextBlock Grid.Row="0" Text="Profiles" FontSize="15" FontWeight="SemiBold"
                                Foreground="#CCCCCC" Margin="14,12,12,6"/>
 
                     <!-- + New Profile Button -->
-                    <Button Grid.Row="1" Content="+ Nuevo Perfil"
+                    <Button Grid.Row="1" Content="+ New Profile"
                             Command="{Binding NewProfileCommand}"
                             Style="{StaticResource NvidiaAccentButtonStyle}"
                             Height="38" Margin="12,0,12,10" FontSize="13"/>
@@ -92,7 +92,7 @@
                                             </StackPanel>
 
                                             <Button Grid.Column="2" Content="🗑" Width="28" Height="28" FontSize="12"
-                                                    ToolTip="Eliminar" Padding="0"
+                                                    ToolTip="Delete" Padding="0"
                                                     Click="DeleteProfileCard_Click"
                                                     Tag="{Binding}"
                                                     Style="{StaticResource NvidiaDarkButtonStyle}"/>
@@ -135,25 +135,25 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Text="Iniciar con Windows" FontSize="13"
+                                <TextBlock Grid.Row="0" Text="Start with Windows" FontSize="13"
                                            Foreground="#AAAAAA" Margin="0,0,0,3"/>
                                 <ui:ToggleSwitch Grid.Row="1" IsOn="{Binding StartWithWindows}"
                                                  OffContent="" OnContent=""/>
                             </Grid>
 
                             <Button Content="⟳" Width="38" Height="38" FontSize="15"
-                                    ToolTip="Refrescar monitores" Margin="0,0,4,0" Padding="0"
+                                    ToolTip="Refresh displays" Margin="0,0,4,0" Padding="0"
                                     Command="{Binding RefreshDisplaysCommand}"
                                     Style="{StaticResource NvidiaDarkButtonStyle}"/>
                             <Button Content="↺" Width="38" Height="38" FontSize="15"
-                                    ToolTip="Restaurar defaults" Padding="0"
+                                    ToolTip="Restore defaults" Padding="0"
                                     Command="{Binding RestoreDefaultsCommand}"
                                     Style="{StaticResource NvidiaDarkButtonStyle}"/>
                         </StackPanel>
                     </Grid>
 
                     <!-- Profile Name -->
-                    <TextBlock Text="Nombre del Perfil" FontSize="12"
+                    <TextBlock Text="Profile Name" FontSize="12"
                                Foreground="#888888" Margin="0,0,0,4"/>
                     <TextBox Text="{Binding ProfileName, UpdateSourceTrigger=PropertyChanged}"
                              FontSize="14" Padding="10,8" Margin="0,0,0,12"
@@ -169,7 +169,7 @@
                     </TextBox>
 
                     <!-- Hotkey -->
-                    <TextBlock Text="Atajo de teclado" FontSize="12"
+                    <TextBlock Text="Keyboard Shortcut" FontSize="12"
                                Foreground="#888888" Margin="0,0,0,4"/>
                     <TextBox x:Name="HotkeyBox" Text="{Binding HotkeyDisplay, Mode=OneWay}"
                              IsReadOnly="True" FontSize="13" Padding="10,8" Margin="0,0,0,12"
@@ -187,7 +187,7 @@
                     </TextBox>
 
                     <!-- Target Display -->
-                    <TextBlock Text="Monitor Destino" FontSize="12"
+                    <TextBlock Text="Target Display" FontSize="12"
                                Foreground="#888888" Margin="0,0,0,4"/>
                     <ComboBox ItemsSource="{Binding AvailableDisplays}"
                               SelectedItem="{Binding SelectedTargetDisplay}"
@@ -256,32 +256,32 @@
                     <Border CornerRadius="10" Padding="16,12" Margin="0,0,0,12"
                             Background="#1A1A1A" BorderBrush="#2A2A2A" BorderThickness="1">
                         <StackPanel>
-                            <TextBlock Text="Ajustes de Color" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"
+                            <TextBlock Text="Color Settings" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"
                                        Foreground="#CCCCCC"/>
-                            <controls:ColorSlider Header="Brillo" Unit="%" Minimum="0" Maximum="100"
+                            <controls:ColorSlider Header="Brightness" Unit="%" Minimum="0" Maximum="100"
                                                   Value="{Binding Brightness}"/>
-                            <controls:ColorSlider Header="Contraste" Unit="%" Minimum="0" Maximum="100"
+                            <controls:ColorSlider Header="Contrast" Unit="%" Minimum="0" Maximum="100"
                                                   Value="{Binding Contrast}"/>
                             <controls:ColorSlider Header="Gamma" Unit="" Minimum="0.5" Maximum="3.0" TickFrequency="0.05"
                                                   Value="{Binding Gamma}"/>
                             <controls:ColorSlider Header="Vibrance" Unit="%" Minimum="0" Maximum="100"
                                                   Value="{Binding DigitalVibrance}"/>
-                            <controls:ColorSlider Header="Temp. Color" Unit="K" Minimum="-100" Maximum="100"
+                            <controls:ColorSlider Header="Color Temp" Unit="K" Minimum="-100" Maximum="100"
                                                   Value="{Binding ColorTemperature}"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Action buttons -->
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Leer del monitor"
+                        <Button Content="Read from Monitor"
                                 Command="{Binding ReadFromMonitorCommand}"
                                 Style="{StaticResource NvidiaDarkButtonStyle}"
                                 Padding="14,8" Margin="0,0,8,0" FontSize="12"/>
-                        <Button Content="Cancelar"
+                        <Button Content="Cancel"
                                 Command="{Binding CancelEditCommand}"
                                 Style="{StaticResource NvidiaDarkButtonStyle}"
                                 Padding="14,8" Margin="0,0,8,0" FontSize="12"/>
-                        <Button Content="Guardar Perfil"
+                        <Button Content="Save Profile"
                                 Command="{Binding SaveProfileCommand}"
                                 Style="{StaticResource NvidiaAccentButtonStyle}"
                                 Padding="18,8" FontSize="12"/>
@@ -301,10 +301,10 @@
                            Foreground="#888888"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="♥" Width="32" Height="28" FontSize="14"
-                            ToolTip="Donar" Padding="0" Margin="0,0,6,0"
+                            ToolTip="Donate" Padding="0" Margin="0,0,6,0"
                             Click="DonateButton_Click" Foreground="#76B900"
                             Style="{StaticResource NvidiaDarkButtonStyle}"/>
-                    <Button Content="Salir" Height="28" Padding="14,0"
+                    <Button Content="Exit" Height="28" Padding="14,0"
                             FontSize="12" Click="ExitButton_Click"
                             Style="{StaticResource NvidiaDarkButtonStyle}"/>
                 </StackPanel>
