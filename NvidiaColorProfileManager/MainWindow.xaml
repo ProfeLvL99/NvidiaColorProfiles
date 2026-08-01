@@ -300,6 +300,8 @@
                 <TextBlock Text="{Binding StatusMessage}" FontSize="12" VerticalAlignment="Center"
                            Foreground="#888888"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="by @ProfeLvL99" FontSize="11" Foreground="#666666"
+                               VerticalAlignment="Center" Margin="0,0,8,0"/>
                     <Button Content="♥" Width="32" Height="28" FontSize="14"
                             ToolTip="Donate" Padding="0" Margin="0,0,6,0"
                             Click="DonateButton_Click" Foreground="#76B900"
