@@ -11,6 +11,7 @@ namespace NvidiaColorProfileManager;
 public partial class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
+    public static bool StartMinimized { get; private set; }
 
     [DllImport("user32.dll")]
     private static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -22,6 +23,9 @@ public partial class App : Application
 
     private void OnStartup(object sender, StartupEventArgs e)
     {
+        // Check if launched with --minimized (e.g., from Windows startup)
+        StartMinimized = e.Args.Contains("--minimized");
+
         // Single instance: si ya hay otra instancia, traerla al frente y salir
         var currentProcess = Process.GetCurrentProcess();
         var existingProcess = Process.GetProcessesByName(currentProcess.ProcessName)

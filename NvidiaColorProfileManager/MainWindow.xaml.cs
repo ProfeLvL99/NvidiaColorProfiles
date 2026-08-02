@@ -45,6 +45,9 @@ public partial class MainWindow : Window
         RegisterAllHotkeys();
         HwndSource.FromHwnd(handle)?.AddHook(WndProc);
         SetupTrayIcon();
+
+        if (App.StartMinimized)
+            Hide();
     }
 
     // ── Profile card handlers ──

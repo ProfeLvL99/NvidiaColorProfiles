@@ -43,6 +43,7 @@ public class StartupService
         dynamic shell = Activator.CreateInstance(shellType)!;
         dynamic shortcut = shell.CreateShortcut(shortcutPath);
         shortcut.TargetPath = targetPath;
+        shortcut.Arguments = "--minimized";
         shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath)!;
         shortcut.Save();
     }
