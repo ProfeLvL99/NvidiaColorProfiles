@@ -8,6 +8,8 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Icons\app.ico</ApplicationIcon>
     <AssemblyName>NVIDIA Color Profiles</AssemblyName>
+    <IncludeContentInSingleFile>true</IncludeContentInSingleFile>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
 
   <ItemGroup>
