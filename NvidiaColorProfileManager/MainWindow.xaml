@@ -5,26 +5,71 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         xmlns:controls="clr-namespace:NvidiaColorProfileManager.Views.Controls"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         mc:Ignorable="d"
-        ui:WindowHelper.UseModernWindowStyle="True"
-        ui:TitleBar.Height="36"
-        ui:TitleBar.Foreground="#76B900"
-        ui:TitleBar.Background="#2D2D2D"
         Foreground="#CCCCCC"
         Title="NVIDIA Color Profiles"
         Width="960" Height="640"
         Icon="Resources/Icons/app.ico"
         MinWidth="860" MinHeight="500"
         WindowStartupLocation="CenterScreen"
-        Background="#0D0D0D">
+        Background="#0D0D0D"
+        WindowStyle="None"
+        Activated="Window_Activated"
+        Deactivated="Window_Deactivated"
+        StateChanged="Window_StateChanged">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome GlassFrameThickness="0" CornerRadius="8"
+                            CaptionHeight="36" ResizeBorderThickness="4"
+                            UseAeroCaptionButtons="False"/>
+    </shell:WindowChrome.WindowChrome>
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="12">
+        <!-- ═══ CUSTOM TITLE BAR ═══ -->
+        <Grid x:Name="TitleBarGrid" Grid.Row="0" Background="#2D2D2D"
+              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Icon + Title -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="12,0,0,0">
+                <Image Source="Resources/Icons/app.ico" Width="18" Height="18"
+                       VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock Text="NVIDIA Color Profiles" FontSize="13"
+                           FontWeight="SemiBold" Foreground="#76B900"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Window buttons -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button x:Name="MinimizeBtn" Content="─" Width="46" Height="36"
+                        FontSize="14" Foreground="#888888"
+                        Click="MinimizeBtn_Click"
+                        Style="{StaticResource TitleBarButtonStyle}"/>
+                <Button x:Name="MaximizeBtn" Content="□" Width="46" Height="36"
+                        FontSize="12" Foreground="#888888"
+                        Click="MaximizeBtn_Click"
+                        Style="{StaticResource TitleBarButtonStyle}"/>
+                <Button x:Name="CloseBtn" Content="✕" Width="46" Height="36"
+                        FontSize="13" Foreground="#888888"
+                        Click="CloseBtn_Click"
+                        Style="{StaticResource TitleBarCloseButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- ═══ MAIN CONTENT ═══ -->
+        <Grid Grid.Row="1" Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="260" MinWidth="220"/>
                 <ColumnDefinition Width="Auto"/>
@@ -295,7 +340,7 @@
         </Grid>
 
         <!-- Status Bar -->
-        <Border Grid.Row="1" Margin="12,0,12,8" Padding="12,8" CornerRadius="8"
+        <Border Grid.Row="2" Margin="12,0,12,8" Padding="12,8" CornerRadius="8"
                 Background="#1A1A1A" BorderBrush="#2A2A2A" BorderThickness="1">
             <Grid>
                 <TextBlock Text="{Binding StatusMessage}" FontSize="12" VerticalAlignment="Center"

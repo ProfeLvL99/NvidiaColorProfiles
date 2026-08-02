@@ -149,7 +149,7 @@ public partial class MainWindow : Window
     private System.Drawing.Icon LoadAppIcon()
     {
         try { var ico = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath!); if (ico != null) return ico; } catch { }
-        try { var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.ico"); if (File.Exists(p)) return new System.Drawing.Icon(p); } catch { }
+        try { var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Icons", "app.ico"); if (File.Exists(p)) return new System.Drawing.Icon(p); } catch { }
         return SystemIcons.Application;
     }
 
@@ -204,5 +204,49 @@ public partial class MainWindow : Window
     {
         var p = _profileRepository.GetById(id);
         if (p != null) { _profileApplier.ApplyProfile(p); _viewModel.StatusMessage = $"Hotkey: profile '{p.Name}' applied."; }
+    }
+
+    // ── Custom Title Bar ──
+    private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount == 2)
+        {
+            MaximizeBtn_Click(sender, e);
+            return;
+        }
+        DragMove();
+    }
+
+    private void MinimizeBtn_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void MaximizeBtn_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+    }
+
+    private void CloseBtn_Click(object sender, RoutedEventArgs e)
+    {
+        // Minimize to tray instead of closing (same as native X button behavior)
+        Hide();
+    }
+
+    private void Window_StateChanged(object sender, EventArgs e)
+    {
+        MaximizeBtn.Content = WindowState == WindowState.Maximized ? "❐" : "□";
+    }
+
+    private void Window_Activated(object sender, EventArgs e)
+    {
+        TitleBarGrid.Background = new System.Windows.Media.SolidColorBrush(
+            System.Windows.Media.Color.FromRgb(0x2D, 0x2D, 0x2D));
+    }
+
+    private void Window_Deactivated(object sender, EventArgs e)
+    {
+        TitleBarGrid.Background = new System.Windows.Media.SolidColorBrush(
+            System.Windows.Media.Color.FromRgb(0x1E, 0x1E, 0x1E));
     }
 }
