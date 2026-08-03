@@ -203,7 +203,8 @@ public partial class MainWindow : Window
     private void OnHotkeyPressed(int id)
     {
         var p = _profileRepository.GetById(id);
-        if (p != null) { _profileApplier.ApplyProfile(p); _viewModel.StatusMessage = $"Hotkey: profile '{p.Name}' applied."; }
+        if (p != null)
+            _viewModel.ApplyProfileCommand.Execute(p);
     }
 
     // ── Custom Title Bar ──
