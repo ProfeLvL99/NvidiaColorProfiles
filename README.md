@@ -2,7 +2,11 @@
 
 A WPF desktop app to manage color profiles for NVIDIA GPUs. Create, save, and switch between color settings (brightness, contrast, gamma, digital vibrance, color temperature) with hotkeys and system tray support.
 
-![Screenshot](NvidiaColorProfileManager/screenshots/NVIDIAColorProfiles_01.png)
+![Screenshot](NvidiaColorProfileManager/screenshots/NVIDIAColorProfiles_01.png?v=2)
+
+## Disclaimer
+
+This project is not affiliated with, endorsed by, or connected to NVIDIA Corporation in any way. "NVIDIA" is a registered trademark of NVIDIA Corporation.
 
 ## Why?
 
