@@ -27,7 +27,6 @@ public class ProfileApplierService : IProfileApplierService
 
         if (targetId < 0)
         {
-            // Id < 0 = "Todos los monitores"
             _gammaService.ApplyToAllMonitors(
                 profile.Settings.Gamma,
                 profile.Settings.Brightness,
@@ -43,7 +42,6 @@ public class ProfileApplierService : IProfileApplierService
         }
         else
         {
-            // Id >= 0 = monitor específico
             int nvIndex = targetId;
 
             _gammaService.ApplyToMonitor(nvIndex,

@@ -99,6 +99,9 @@ public partial class MainViewModel : ObservableObject
                 if (_nvapiService.IsAvailable && targetId < Displays.Count)
                     _nvapiService.SetDigitalVibrance(targetId, DigitalVibrance);
             }
+
+            if (!_gammaService.LastApplySucceeded)
+                StatusMessage = $"Warning: gamma ramp rejected by driver (code {_gammaService.LastErrorCode}). Try less extreme values.";
         }
         catch (Exception ex)
         {
