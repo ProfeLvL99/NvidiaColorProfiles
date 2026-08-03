@@ -69,8 +69,10 @@ public partial class App : Application
 
         Services = services.BuildServiceProvider();
 
-        // Iniciar ventana principal
+        // Iniciar ventana principal (oculta si arranca minimizada)
         var mainWindow = new MainWindow();
         mainWindow.Show();
+        if (StartMinimized)
+            mainWindow.Hide();
     }
 }
