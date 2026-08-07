@@ -110,46 +110,48 @@ public class WindowsGammaService
             Blue = new ushort[256]
         };
 
-        // Encode brightness as a gamma multiplier — this keeps ramp endpoints at 0 and 65535
-        // B=50 → multiplier=1.0 (no change). B<50 → higher gamma (darker midtones). B>50 → lower gamma (brighter midtones).
-        double brightnessGamma = brightness > 0 ? 50.0 / brightness : 10.0;
+        double brightnessFactor = brightness / 50.0;
         double contrastFactor = contrast / 50.0;
         double tempFactor = colorTemperature / 100.0;
 
-        // Color temperature via per-channel gamma: warm = red gamma higher (more red), blue gamma lower (less blue)
-        double redGamma = gamma * brightnessGamma * (1.0 + tempFactor * 0.7);
-        double greenGamma = gamma * brightnessGamma;
-        double blueGamma = gamma * brightnessGamma * (1.0 - tempFactor * 0.7);
+        double redMult = 1.0 - tempFactor * 0.40;
+        double blueMult = 1.0 + tempFactor * 0.40;
 
-        // Fold contrast into gamma — keeps output as pure power-law (what SetDeviceGammaRamp validates)
-        // C>50 → higher gamma (steeper, more contrast). C<50 → lower gamma (flatter, less contrast).
-        double contrastPower = contrastFactor > 0.01 ? Math.Pow(contrastFactor, 0.6) : 0.1;
-        redGamma   *= contrastPower;
-        greenGamma *= contrastPower;
-        blueGamma  *= contrastPower;
-
-        // Prevent degenerate gamma values (too low → first entries round to 0 creating duplicates;
-        // too high → ramp too flat and SetDeviceGammaRamp may reject).
-        const double minGamma = 0.4;
-        const double maxGamma = 3.5;
-        redGamma   = Math.Clamp(redGamma,   minGamma, maxGamma);
-        greenGamma = Math.Clamp(greenGamma, minGamma, maxGamma);
-        blueGamma  = Math.Clamp(blueGamma,  minGamma, maxGamma);
+        // Clamp gamma to a safe range for the power function
+        const double minGamma = 0.5;
+        const double maxGamma = 3.0;
+        double safeGamma = Math.Clamp(gamma, minGamma, maxGamma);
 
         for (int i = 0; i < 256; i++)
         {
             double n = i / 255.0;
 
-            double r = Math.Pow(n, 1.0 / redGamma) * 65535.0;
-            double g = Math.Pow(n, 1.0 / greenGamma) * 65535.0;
-            double b = Math.Pow(n, 1.0 / blueGamma) * 65535.0;
+            // 1. Pure power-law gamma (independent, preserves 0 and 65535)
+            double r = Math.Pow(n, 1.0 / safeGamma) * 65535.0;
+            double g = Math.Pow(n, 1.0 / safeGamma) * 65535.0;
+            double b = Math.Pow(n, 1.0 / safeGamma) * 65535.0;
 
-            ramp.Red[i] = (ushort)Math.Round(r);
-            ramp.Green[i] = (ushort)Math.Round(g);
-            ramp.Blue[i] = (ushort)Math.Round(b);
+            // 2. Contrast — S-curve around midpoint (C>50 pushes away, C<50 pulls toward center)
+            r = (r - 32767.5) * contrastFactor + 32767.5;
+            g = (g - 32767.5) * contrastFactor + 32767.5;
+            b = (b - 32767.5) * contrastFactor + 32767.5;
+
+            // 3. Brightness — linear multiplier (B>50 brighter, B<50 darker)
+            r *= brightnessFactor;
+            g *= brightnessFactor;
+            b *= brightnessFactor;
+
+            // 4. Color temperature — per-channel multiplier
+            r *= redMult;
+            b *= blueMult;
+
+            // Clamp to valid range, then EnsureStrictlyIncreasing fixes any plateaus
+            ramp.Red[i]   = (ushort)Math.Clamp(Math.Round(r), 0, 65535);
+            ramp.Green[i] = (ushort)Math.Clamp(Math.Round(g), 0, 65535);
+            ramp.Blue[i]  = (ushort)Math.Clamp(Math.Round(b), 0, 65535);
         }
 
-        // Fix any duplicate values caused by rounding (can still happen at extreme low gamma)
+        // Fix any duplicate/clamped values — guarantees valid ramp for SetDeviceGammaRamp
         EnsureStrictlyIncreasing(ramp.Red);
         EnsureStrictlyIncreasing(ramp.Green);
         EnsureStrictlyIncreasing(ramp.Blue);
